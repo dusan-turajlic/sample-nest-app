@@ -25,6 +25,18 @@ export class ApiController {
     };
   }
 
+  @ApiOperation({ summary: 'Its a specific thing' })
+  @ApiOkResponse({
+    description: 'This is a response',
+    type: ResponseEntity,
+  })
+  @Get(':id')
+  getSpecificThing(@Param('id') id: string) {
+    return {
+      property: id,
+    };
+  }
+
   @ApiOperation({ summary: 'Its a another thing' })
   @ApiOkResponse({
     description: 'This is another response',
@@ -53,12 +65,8 @@ export class ApiController {
     description: 'This is a created response',
     type: AnotherThingDto,
   })
-  @Post(':id/connectToAnotherThing')
-  createAnotherTing(
-    @Body() anotherThingDto: AnotherThingDto,
-    @Param('id') id: string,
-  ) {
-    console.log("I'll just log this id", id);
+  @Post()
+  createAnotherTing(@Body() anotherThingDto: AnotherThingDto) {
     return anotherThingDto;
   }
 }

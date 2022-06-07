@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 
@@ -16,16 +16,19 @@ describe('AppController (e2e)', () => {
   });
 
   it('/api/thing (GET)', () => {
-    return request(app.getHttpServer()).get('/api/thing').expect(200).expect({
-      property: '00000000-0000-0000-0000-000000000000',
-    });
+    return request(app.getHttpServer())
+      .get('/api/thing')
+      .expect(HttpStatus.OK)
+      .expect({
+        property: '00000000-0000-0000-0000-000000000000',
+      });
   });
 
   it('/api/thing/:id/connectToAnotherThing (GET)', () => {
     const someMockId = 'magic-uuid-here';
     return request(app.getHttpServer())
       .get(`/api/thing/${someMockId}/connectToAnotherThing`)
-      .expect(200)
+      .expect(HttpStatus.OK)
       .expect({
         property: someMockId,
       });
@@ -38,7 +41,7 @@ describe('AppController (e2e)', () => {
       .send({
         property: someMockId,
       })
-      .expect(200)
+      .expect(HttpStatus.OK)
       .expect({
         property: someMockId,
       });
@@ -47,11 +50,11 @@ describe('AppController (e2e)', () => {
   it('/api/thing/:id/connectToAnotherThing (POST)', () => {
     const someMockId = 'magic-uuid-here-but-in-put';
     return request(app.getHttpServer())
-      .post(`/api/thing/${someMockId}/connectToAnotherThing`)
+      .post(`/api/thing`)
       .send({
         anotherThingId: someMockId,
       })
-      .expect(201)
+      .expect(HttpStatus.CREATED)
       .expect({
         anotherThingId: someMockId,
       });
