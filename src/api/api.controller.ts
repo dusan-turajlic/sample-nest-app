@@ -1,7 +1,6 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Res } from '@nestjs/common';
 import ResponseEntity from '../entities/response.entity';
 import {
-  ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -14,59 +13,38 @@ import AnotherThingDto from '../dtos/anotherThing.dto';
 @ApiTags('Thing')
 export class ApiController {
   @ApiOperation({ summary: 'Its a thing' })
-  @ApiOkResponse({
-    description: 'This is a response',
-    type: ResponseEntity,
-  })
   @Get()
-  getThing() {
+  getThing(): ResponseEntity {
     return {
       property: '00000000-0000-0000-0000-000000000000',
     };
   }
 
   @ApiOperation({ summary: 'Its a specific thing' })
-  @ApiOkResponse({
-    description: 'This is a response',
-    type: ResponseEntity,
-  })
+  @ApiOkResponse({ description: 'Yes!', type: ResponseEntity })
   @Get(':id')
-  getSpecificThing(@Param('id') id: string) {
+  getSpecificThing(@Param('id') id: string): ResponseEntity {
     return {
       property: id,
     };
   }
 
   @ApiOperation({ summary: 'Its a another thing' })
-  @ApiOkResponse({
-    description: 'This is another response',
-    type: ResponseEntity,
-  })
-  @ApiNotFoundResponse({
-    description: 'Was not able to find that other thing',
-  })
+  @ApiNotFoundResponse()
   @Get(':id/connectToAnotherThing')
-  connectToAnotherThing(@Param('id') id: string) {
+  connectToAnotherThing(@Param('id') id: string): ResponseEntity {
     return {
       property: id,
     };
   }
 
-  @ApiOkResponse({
-    description: 'This is another response',
-    type: ThingDto,
-  })
   @Put()
-  replaceThatThing(@Body() thingDto: ThingDto) {
+  replaceThatThing(@Body() thingDto: ThingDto): ThingDto {
     return thingDto;
   }
 
-  @ApiCreatedResponse({
-    description: 'This is a created response',
-    type: AnotherThingDto,
-  })
   @Post()
-  createAnotherTing(@Body() anotherThingDto: AnotherThingDto) {
+  createAnotherTing(@Body() anotherThingDto: AnotherThingDto): AnotherThingDto {
     return anotherThingDto;
   }
 }
